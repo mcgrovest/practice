@@ -7,6 +7,7 @@ import os
 import configparser
 import sys
 
+
 template_mapNotifLast = ('http://{server}/kv/keys/mapNotifLast:{mapid}:{kv_session}'
                          '?n=3&r=2&w=2&waitTimeout=60&waitVersion={lastversion}')
 template_mapNotif = ('http://{server}/kv/partition/mapNotif:{mapid}:{kv_session}'
@@ -23,6 +24,7 @@ if sys.argv[1] == 'test':
     server = config['TEST']['server']
     username = config['TEST']['username']
     password = config['TEST']['password']
+    password = hashlib.md5(password.encode('utf-8')).hexdigest()
     mapid = config['TEST']['mapid']
     kv_session = config['TEST']['kv_session']
     node_id = config['TEST']['node_id']
@@ -32,6 +34,7 @@ elif sys.argv[1] == 'prod':
     server = config['PROD']['server']
     username = config['PROD']['username']
     password = config['PROD']['password']
+    password = hashlib.md5(password.encode('utf-8')).hexdigest()
     mapid = config['PROD']['mapid']
     kv_session = config['PROD']['kv_session']
     node_id = config['PROD']['node_id']
@@ -122,4 +125,3 @@ if __name__ == '__main__':
                 user_changer = json.loads(response_getexecutor.content)
                 user_changer = user_changer['body']['properties']['byType']
                 change_branch_statuses(branch, changed_node)
-#  просто коммент чтобы закоммитить
